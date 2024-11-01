@@ -1,0 +1,6 @@
+[packages]
+websockets = "*"
+fastapi = {extras = ["standard"], version = "*"}
+
+[requires]
+python_version = "3.12"
