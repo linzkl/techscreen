@@ -1,6 +1,7 @@
 '''
-reverse and sort list
+1. reverse and sort list
 reverse and sort may conflict each other
+possible one sorted list got reversed, after sorting, the reversed list got reversed again
 '''
 def reverse_list(target:list):
     for i in range(len(target)//2):
@@ -15,36 +16,40 @@ def sort_list(target:list):
     return target
 
 '''
-solve sudoku
+2. solve sudoku
 '''
-all = {1,2,3,4,5,6,7,8,9}
+ALL_VALUES = {1,2,3,4,5,6,7,8,9}
 size = 9
 
 def solve_sudoku(target:list):
     for row in range(size):
         for col in range(size):
             # if item is not filled, start trying possible candidates
-            if target[row][col] not in all:
+            if target[row][col] not in ALL_VALUES:
                 candidates = get_candidates(target, size, row, col)
                 for el in candidates:
-                    original, target[row][col] = target[row][col], el
+                    original_value, target[row][col] = target[row][col], el
                     if solve_sudoku(target, size):
                         return True
-                    target[row][col] = original
+                    # reset back to original value and continue trying next element until solved or failed
+                    target[row][col] = original_value
                 return False
     return True
 
 # retrieve all available candidates for the empty position
 def get_candidates(target:list, size, row, col):
-    existed = set()
-    for i in range(size):
-        existed.add(target[row][i])
-        existed.add(target[i][col])
+    used_values = set()
 
-    section_row = row // 3
-    section_col = col // 3
+    # find all used row and col elements
+    for i in range(size):
+        used_values.add(target[row][i])
+        used_values.add(target[i][col])
+
+    # find all used 3x3 block elements
+    block_row = row // 3
+    block_col = col // 3
     for k in range(3):
         for v in range(3):
-            existed.add(target[3*section_row + k][3*section_col + v])
+            used_values.add(target[ 3 * block_row + k ][ 3 * block_col + v])
     
-    return all - existed
+    return ALL_VALUES - used_values

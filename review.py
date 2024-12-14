@@ -4,17 +4,21 @@ def add_to_list(value, my_list=[]):
     return my_list
 
 # update
-# original one will always append to same list if not giving my_list value
+# original one will always append to same default list if not providing my_list value
+# new list won't be able to be created when call it without my_list value after first invoke
 # if this method purpose for always creating new list
 def add_to_list(value, my_list=None):
     if my_list is None:
         my_list = []
     my_list.append(value)
     return my_list
-# if always append to existing list, remove default or inline this method
-def add_to_list(value, my_list):
-    my_list.append(value)
-    return my_list
+
+# if always append to existing list, prefer inline this method
+# my_list = []
+# my_list = do_somthing()
+# my_list.append(value)
+
+#############
 
 # Review 2
 def format_greeting(name, age):
@@ -24,6 +28,8 @@ def format_greeting(name, age):
 def format_greeting(name, age):
     # missing f-string
     return f"Hello, my name is {name} and I am {age} years old."
+
+#############
 
 # Review 3
 class Counter:
@@ -44,6 +50,8 @@ class Counter:
         self.count += 1
     def get_count(self):
         return self.count
+
+#############
 
 # Review 4
 import threading
@@ -97,6 +105,7 @@ for _ in range(10):
 for t in threads:
     t.join()
 
+#############
 
 # Review 5
 def count_occurrences(lst):
@@ -112,7 +121,6 @@ def count_occurrences(lst):
 def count_occurrences(lst):
     counts = {}
     for item in lst:
-        # possible using counts.update({item: counts.get(item, 0) + 1}) more succint
         if item in counts:
             # =+ is not valid, counts[item] is not save as counts.get(item, 1)
             counts[item] += 1
@@ -120,5 +128,10 @@ def count_occurrences(lst):
             counts[item] = 1
     return counts
 
- 
+# possible using counts.update({item: counts.get(item, 0) + 1}) more succint
+def count_occurences(lst):
+    counts = {}
+    for item in lst:
+        counts.update({item: counts.get(item, 0) + 1})
+    return counts
 
