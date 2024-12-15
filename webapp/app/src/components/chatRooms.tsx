@@ -1,39 +1,24 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Alert, Card, Container, IconButton, Input } from "@mui/material";
+import { Card, Container, IconButton, Input } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import AddIcon from "@mui/icons-material/Add";
 
 import { ALPHA_NUMERIC_DASH_REGEX } from "@/constants";
-import { createRoom, getRooms } from "@/services/helper";
+import { createRoom } from "@/services/helper";
 
 import RoomCard from "./roomCard";
 
-const ChatRooms = () => {
+const ChatRooms = (params: {
+  rooms: string[];
+  setError: (error: string) => void;
+  setMessage: (message: string) => void;
+}) => {
   const [newRoomName, setNewRoomName] = useState("");
-  const [rooms, setRooms] = useState<string[]>([]);
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    getRooms()
-      .then((res) => res.json())
-      .then((res) => {
-        setRooms(res["rooms"]);
-      })
-      .catch(() => {
-        setMessage("");
-        setError("Error fetching rooms.");
-      });
-  });
 
   return (
     <Container>
-      <Grid size={12}>
-        {error && <Alert severity="error">{error}</Alert>}
-        {message && <Alert severity="success">{message}</Alert>}
-      </Grid>
       <Grid size={12} columns={5} marginTop={5}>
         <div
           style={{
@@ -43,8 +28,13 @@ const ChatRooms = () => {
             justifyContent: "space-evenly",
           }}
         >
-          {rooms.map((room) => (
-            <RoomCard key={room} roomId={room}></RoomCard>
+          {params.rooms.map((room) => (
+            <RoomCard
+              key={room}
+              roomId={room}
+              setError={params.setError}
+              setMessage={params.setMessage}
+            ></RoomCard>
           ))}
           <Card
             sx={{ width: 200, height: 180 }}
@@ -75,11 +65,11 @@ const ChatRooms = () => {
                     const res = await createRoom(newRoomName);
                     const output = await res.json();
                     if (res.status != 201) {
-                      setError(output["message"]);
-                      setMessage("");
+                      params.setError(output["message"]);
+                      params.setMessage("");
                     } else {
-                      setError("");
-                      setMessage("Room created!");
+                      params.setError("");
+                      params.setMessage("Room created!");
                     }
                   }
                 }}

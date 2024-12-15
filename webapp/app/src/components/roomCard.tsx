@@ -14,8 +14,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-const RoomCard = (params: { roomId: string }) => {
-  const [error, setError] = useState<string | null>(null);
+const RoomCard = (params: {
+  roomId: string;
+  setError: (error: string) => void;
+  setMessage: (message: string) => void;
+}) => {
   const dispatch = useAppDispatch();
 
   return (
@@ -41,16 +44,17 @@ const RoomCard = (params: { roomId: string }) => {
             const res = await removeRoom(params.roomId);
             if (res.status !== 204) {
               const out = await res.json();
-              setError(out.message);
+              params.setError(out.message);
+              params.setMessage("");
             } else {
-              setError("");
+              params.setError("");
+              params.setMessage(`Room ${params.roomId} removed!`);
             }
           }}
         >
           Remove
         </Button>
       </CardActions>
-      {error && <Alert severity="error">{error}</Alert>}
     </Card>
   );
 };
