@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTitle,
   Input,
-  Typography,
 } from "@mui/material";
 
 import { ALPHA_NUMERIC_DASH_REGEX } from "@/constants";

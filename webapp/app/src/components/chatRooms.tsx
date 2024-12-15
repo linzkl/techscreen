@@ -14,6 +14,7 @@ const ChatRooms = (params: {
   rooms: string[];
   setError: (error: string) => void;
   setMessage: (message: string) => void;
+  setSocket: (ws: WebSocket) => void;
 }) => {
   const [newRoomName, setNewRoomName] = useState("");
 
@@ -34,6 +35,7 @@ const ChatRooms = (params: {
               roomId={room}
               setError={params.setError}
               setMessage={params.setMessage}
+              setSocket={params.setSocket}
             ></RoomCard>
           ))}
           <Card

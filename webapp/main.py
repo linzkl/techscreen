@@ -20,6 +20,7 @@ class RoomConnectionManager:
     def __init__(self, room_id: str):
         self.room_id = room_id
         self.active_connections: list[WebSocket] = []
+        self.active_users: list[str] = []
 
     def get_id(self):
         return self.room_id
@@ -27,11 +28,15 @@ class RoomConnectionManager:
     def get_active_connections(self):
         return self.active_connections
     
-    async def connect(self, websocket: WebSocket):
+    async def connect(self, websocket: WebSocket, user: str):
         self.active_connections.append(websocket)
+        message = f"{self.active_users} in the room." if len(self.active_users) > 0 else "No one in the room yet. Leaving the room will remove the room itself!!!"
+        await websocket.send_text(message)
+        self.active_users.append(user)
     
-    async def disconnect(self, websocket: WebSocket):
+    async def disconnect(self, websocket: WebSocket, user: str):
         self.active_connections.remove(websocket)
+        self.active_users.remove(user)
     
     async def broadcast(self, message: str):
         for connection in self.active_connections:
@@ -48,22 +53,19 @@ async def get():
 async def websocket_endpoint(websocket: WebSocket, room_id: str, username: str):
     await websocket.accept()
     if room_id not in rooms:
-        await websocket.send_text(f"Room {room_id} not exist, please create room first.")
-
-        # rooms[room_id] = RoomConnectionManager(room_id)
+        await websocket.send_text(f"Room {room_id} not exist, please create room before enter.")
     else:
-
         manager: RoomConnectionManager = rooms[room_id]
         
         try:
-            await manager.connect(websocket)
+            await manager.connect(websocket, username)
             await manager.broadcast(f"{username} joined.")
 
             while True:
                 data = await websocket.receive_text()
                 await manager.broadcast(f"{username}: {data}")
         except WebSocketDisconnect:
-            await manager.disconnect(websocket)
+            await manager.disconnect(websocket, username)
             await manager.broadcast(f"{username} left.")
             if len(manager.active_connections) == 0:
                 rooms.pop(room_id)
@@ -93,18 +95,3 @@ async def remove_room(request: RoomRequest):
         status_code=400,
         content={"message": f"Room {request.room_id} is not empty."})
     del rooms[request.room_id]
-
-
-
-
-# @app.get("/url-list")
-# def get_all_urls():
-#     url_list = [{"path": route.path, "name": route.name} for route in app.routes]
-#     return url_list
-
-# @app.get("/url-list-from-request")
-# def get_all_urls_from_request(request: Request):
-#     url_list = [
-#         {"path": route.path, "name": route.name} for route in request.app.routes
-#     ]
-#     return url_list

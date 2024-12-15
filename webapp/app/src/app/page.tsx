@@ -22,6 +22,8 @@ export default function Home() {
   const [rooms, setRooms] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [socket, setSocket] = useState<WebSocket>();
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -39,6 +41,14 @@ export default function Home() {
       });
   }, [error, message]);
 
+  useEffect(() => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.onmessage = (event: MessageEvent<any>) => {
+        console.log(event.data)
+      };
+    }
+  });
+
   return (
     <Grid container size={12}>
       <Grid container size={12} justifyContent={"center"}>
@@ -50,12 +60,13 @@ export default function Home() {
       </Grid>
       <Grid container size={12} marginTop={5}>
         {connectedUser && rooms.includes(selectedRoom) ? (
-          <ChatDialog></ChatDialog>
+          <ChatDialog socket={socket} setMessage={setMessage}></ChatDialog>
         ) : (
           <ChatRooms
             rooms={rooms}
             setError={setError}
             setMessage={setMessage}
+            setSocket={setSocket}
           ></ChatRooms>
         )}
       </Grid>

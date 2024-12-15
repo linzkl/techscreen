@@ -1,10 +1,10 @@
 "use client";
 
+import { WEBSOCKET_URL } from "@/constants";
 import { selectRoom } from "@/lib/features/metaSlice";
-import { useAppDispatch } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { removeRoom } from "@/services/helper";
 import {
-  Alert,
   Button,
   Card,
   CardActions,
@@ -12,13 +12,14 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
 
 const RoomCard = (params: {
   roomId: string;
   setError: (error: string) => void;
   setMessage: (message: string) => void;
+  setSocket: (ws: WebSocket) => void;
 }) => {
+  const user = useAppSelector((state) => state.metadata.connectedUser);
   const dispatch = useAppDispatch();
 
   return (
@@ -34,6 +35,10 @@ const RoomCard = (params: {
           size="small"
           onClick={() => {
             dispatch(selectRoom(params.roomId));
+            const ws = new WebSocket(
+              `${WEBSOCKET_URL}${params.roomId}/${user}`
+            );
+            params.setSocket(ws)
           }}
         >
           Enter
