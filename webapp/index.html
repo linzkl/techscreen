@@ -32,7 +32,7 @@
 
       function connect(event) {
         usernameLabel.textContent = username.value;
-        ws = new WebSocket(`ws://localhost:8000/ws/${username.value}`);
+        ws = new WebSocket(`ws://localhost:8000/ws/1/${username.value}`);
         ws.onmessage = function (event) {
           var message = document.createElement("li");
           var content = document.createTextNode(event.data);
