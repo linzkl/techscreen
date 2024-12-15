@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useState } from "react";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,18 +10,16 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { updateUser } from "@/lib/features/metaSlice";
 
 export default function ChatHeader() {
-  const [user, setUser] = useState("User");
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const user = useAppSelector((state) => state.metadata.connectedUser);
+  const dispatch = useAppDispatch();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -32,59 +32,39 @@ export default function ChatHeader() {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar
+          disableGutters
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
             sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
             }}
           >
             Chat Room
           </Typography>
-          {user && (
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              {user}
-            </Typography>
-          )}
 
-          {/* <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+          <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
+            {user && (
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  fontFamily: "monospace",
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                }}
               >
-                {page}
-              </Button>
-            ))}
-          </Box> */}
-          <Box sx={{ flexGrow: 0 }}>
+                {user}
+              </Typography>
+            )}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Readami" />
+                <Avatar alt={user} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -103,13 +83,14 @@ export default function ChatHeader() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
+              <MenuItem
+                onClick={() => {
+                  dispatch(updateUser(""));
+                  handleCloseUserMenu();
+                }}
+              >
+                <Typography sx={{ textAlign: "center" }}>changeUser</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

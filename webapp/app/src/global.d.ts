@@ -1,5 +1,5 @@
 type Metadata = {
-  user: string;
-  selectedRoomId: string;
+  connectedUser: string;
+  selectedRoom: string;
 };
 

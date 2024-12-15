@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: Metadata = {
-  user: '',
-  selectedRoomId: '',
+  connectedUser: "",
+  selectedRoom: "",
 };
 
 export const metaSlice = createSlice({
@@ -10,10 +10,10 @@ export const metaSlice = createSlice({
   initialState,
   reducers: {
     updateUser: (state, action: PayloadAction<string>) => {
-      state.user = action.payload;
+      state.connectedUser = action.payload;
     },
     selectRoom: (state, action: PayloadAction<string>) => {
-      state.selectedRoomId = action.payload;
+      state.selectedRoom = action.payload;
     },
   },
 });

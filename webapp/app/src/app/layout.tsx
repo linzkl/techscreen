@@ -1,11 +1,8 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import StoreProvider from "@/components/StoreProvider";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Chat Room",
-  description: "Chat Room App",
-};
+import "./globals.css";
+
+import StoreProvider from "@/components/storeProvider";
 
 export default function RootLayout({
   children,

@@ -1,3 +1,5 @@
+"use client";
+
 import { selectRoom } from "@/lib/features/metaSlice";
 import { useAppDispatch } from "@/lib/hooks";
 import { removeRoom } from "@/services/helper";
