@@ -5,9 +5,12 @@ export const getRooms = async () => {
 };
 
 export const createRoom = async (roomId: string) => {
-  return invokeRoomAction("POST", JSON.stringify({
-    room_id: roomId,
-  }));
+  return invokeRoomAction(
+    "POST",
+    JSON.stringify({
+      room_id: roomId,
+    })
+  );
 };
 
 export const removeRoom = async (roomId: string) => {
@@ -19,18 +22,22 @@ export const removeRoom = async (roomId: string) => {
   );
 };
 
-const invokeRoomAction = async (
-  action: string,
-  body: string | null
-) => {
+const invokeRoomAction = async (action: string, body: string | null) => {
   let request = {
     method: action,
     headers: {
       "Content-Type": "application/json",
     },
-    body
+    body,
   };
-  return await fetch(ROOM_ACTION_URL, request);
+  try {
+    return await fetch(ROOM_ACTION_URL, request);
+  } catch (e) {
+    return new Response(
+      JSON.stringify({ message: "Backend connection issue." }),
+      { status: 500 }
+    );
+  }
 };
 
 export const connect = (roomId: string, username: string) => {

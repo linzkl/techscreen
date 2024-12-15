@@ -37,14 +37,14 @@ export default function Home() {
       })
       .catch(() => {
         setMessage("");
-        setError("Error fetching rooms.");
+        setError("Error fetching rooms. Backend maybe down.");
       });
   }, [error, message]);
 
   useEffect(() => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.onmessage = (event: MessageEvent<any>) => {
-        console.log(event.data)
+        console.log(event.data);
       };
     }
   });
@@ -59,7 +59,7 @@ export default function Home() {
         {message && <Alert severity="success">{message}</Alert>}
       </Grid>
       <Grid container size={12} marginTop={5}>
-        {connectedUser && rooms.includes(selectedRoom) ? (
+        {connectedUser && rooms?.includes(selectedRoom) ? (
           <ChatDialog socket={socket} setMessage={setMessage}></ChatDialog>
         ) : (
           <ChatRooms

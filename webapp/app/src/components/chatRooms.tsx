@@ -29,7 +29,7 @@ const ChatRooms = (params: {
             justifyContent: "space-evenly",
           }}
         >
-          {params.rooms.map((room) => (
+          {params.rooms?.map((room) => (
             <RoomCard
               key={room}
               roomId={room}
