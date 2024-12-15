@@ -31,7 +31,7 @@ class RoomConnectionManager:
         self.active_connections.append(websocket)
     
     async def disconnect(self, websocket: WebSocket):
-        await self.active_connections.remove(websocket)
+        self.active_connections.remove(websocket)
     
     async def broadcast(self, message: str):
         for connection in self.active_connections:
@@ -65,7 +65,7 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str, username: str):
         except WebSocketDisconnect:
             await manager.disconnect(websocket)
             await manager.broadcast(f"{username} left.")
-            if len(manager.get_active_connections) == 0:
+            if len(manager.active_connections) == 0:
                 rooms.pop(room_id)
 
 
