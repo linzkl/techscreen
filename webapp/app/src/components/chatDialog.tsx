@@ -29,7 +29,6 @@ const ChatDialog = (params: {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    console.log(params.socket?.readyState);
     if (params.socket && params.socket.readyState === WebSocket.CONNECTING) {
       params.socket.onmessage = (event: MessageEvent<string>) => {
         setMessages((messages) => [...messages, event.data]);
@@ -37,6 +36,14 @@ const ChatDialog = (params: {
       params.socket.onclose = (event) => {
         params.setError("Error connecting to socket: " + event.reason);
         dispatch(selectRoom(""));
+      };
+    }
+    if (params.socket && params.socket.readyState === WebSocket.OPEN) {
+      params.socket.onmessage = (event: MessageEvent<string>) => {
+        setMessages((messages) => [...messages, event.data]);
+      };
+      params.socket.onclose = () => {
+        params.setMessage(`Left room: ${selectedRoom}`);
       };
     }
   });
@@ -78,7 +85,6 @@ const ChatDialog = (params: {
               params.socket.readyState == WebSocket.OPEN
             ) {
               params.socket.close();
-              params.setMessage(`Left room: ${selectedRoom}`);
             }
           }}
         >
