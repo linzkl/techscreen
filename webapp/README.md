@@ -5,17 +5,14 @@ This application serve as a Chat Room, which includes two parts, one part is a w
 - open one terminal
 ```
 cd webapp/server
-python3 -m venv .venv
-source .venv/bin/activate
-pipenv install
+python3 -m venv .venv && source .venv/bin/activate && pipenv install
 fastapi dev main.py
 ```
 
 - open a different terminal
 ```
 cd webapp/app
-npm install
-npm run build && npx serve@latest out
+npm install && npm run build && npx serve@latest out
 ```
 
 # Run chat room
