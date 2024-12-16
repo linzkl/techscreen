@@ -34,7 +34,7 @@ const ChatDialog = (params: {
         setMessages((messages) => [...messages, event.data]);
       };
       params.socket.onclose = (event) => {
-        params.setError("Error connecting to socket: " + event.reason);
+        params.setError("Error connecting: " + event.reason);
         dispatch(selectRoom(""));
       };
     }
