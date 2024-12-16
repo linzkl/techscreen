@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Alert, Dialog } from "@mui/material";
+import { Alert } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 import ChatRooms from "@/components/ChatRooms";
