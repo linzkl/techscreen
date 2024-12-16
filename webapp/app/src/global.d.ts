@@ -3,3 +3,6 @@ type Metadata = {
   selectedRoom: string;
 };
 
+type Rooms = {
+  rooms: string[];
+};

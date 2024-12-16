@@ -34,10 +34,10 @@ const RoomCard = (params: {
         <Button
           size="small"
           onClick={() => {
-            dispatch(selectRoom(params.roomId));
             const ws = new WebSocket(
               `${WEBSOCKET_URL}${params.roomId}/${user}`
             );
+            dispatch(selectRoom(params.roomId));
             params.setSocket(ws)
           }}
         >
@@ -50,10 +50,8 @@ const RoomCard = (params: {
             if (res.status !== 204) {
               const out = await res.json();
               params.setError(out.message);
-              params.setMessage("");
             } else {
-              params.setError("");
-              params.setMessage(`Room ${params.roomId} removed!`);
+              params.setMessage(`Removed room: ${params.roomId}`);
             }
           }}
         >

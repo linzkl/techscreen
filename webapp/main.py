@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, status, WebSocket, WebSocketDisconnect, WebSocketException
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -46,14 +46,15 @@ rooms = {}
 
 @app.get("/")
 async def get():
-    with open('./index.html', 'rt') as rf:
+    with open('./index_test.html', 'rt') as rf:
         return HTMLResponse(rf.read())
 
 @app.websocket("/ws/{room_id}/{username}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str, username: str):
     await websocket.accept()
+
     if room_id not in rooms:
-        await websocket.send_text(f"Room {room_id} not exist, please create room before enter.")
+        raise WebSocketException(code=status.WS_1003_UNSUPPORTED_DATA, reason=f"Not exists, please create before enter room: {room_id}")
     else:
         manager: RoomConnectionManager = rooms[room_id]
         
@@ -80,7 +81,7 @@ async def create_room(request: RoomRequest):
     if request.room_id in rooms:
         return JSONResponse(
         status_code=409,
-        content={"message": f"Room {request.room_id} already exists."})
+        content={"message": f"Already existed room: {request.room_id}"})
     rooms[request.room_id] = RoomConnectionManager(request.room_id)
     return {"room_id": request.room_id}
 
@@ -89,9 +90,9 @@ async def remove_room(request: RoomRequest):
     if request.room_id not in rooms:
         return JSONResponse(
         status_code=400,
-        content={"message": f"Room {request.room_id} not exist."})
+        content={"message": f"Not exists room: {request.room_id}"})
     if len(rooms[request.room_id].get_active_connections()) > 0:
         return JSONResponse(
         status_code=400,
-        content={"message": f"Room {request.room_id} is not empty."})
+        content={"message": f"Not empty for room: {request.room_id}"})
     del rooms[request.room_id]

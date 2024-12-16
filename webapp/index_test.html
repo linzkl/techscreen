@@ -4,11 +4,16 @@
     <title>Chat</title>
   </head>
   <body>
-    <h1>Chat Room</h1>
+    <div>
+      <h1>Chat Room Test Console</h1>
+      <h5>use for testing with Next App</h5>
+    </div>
     <div>
       <label
-        >Username: <input type="text" id="username" autocomplete="off"
-      /></label>
+        >Username:
+        <input type="text" id="username" autocomplete="off" />
+      </label>
+      <label>Room: <input type="text" id="room" autocomplete="off" /></label>
       <button onclick="connect(event)">Connect</button>
       <button onclick="disconnect(event)">Disconnect</button>
     </div>
@@ -27,12 +32,15 @@
       var ws = null;
       var usernameLabel = document.getElementById("usernameLabel");
       var username = document.getElementById("username");
+      var room = document.getElementById("room");
       var messages = document.getElementById("messages");
       var messageInput = document.getElementById("messageText");
 
       function connect(event) {
         usernameLabel.textContent = username.value;
-        ws = new WebSocket(`ws://localhost:8000/ws/sdf/${username.value}`);
+        ws = new WebSocket(
+          `ws://localhost:8000/ws/${room.value}/${username.value}`
+        );
         ws.onmessage = function (event) {
           var message = document.createElement("li");
           var content = document.createTextNode(event.data);

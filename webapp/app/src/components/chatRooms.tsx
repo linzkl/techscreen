@@ -8,7 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { ALPHA_NUMERIC_DASH_REGEX } from "@/constants";
 import { createRoom } from "@/services/helper";
 
-import RoomCard from "./roomCard";
+import RoomCard from "./RoomCard";
 
 const ChatRooms = (params: {
   rooms: string[];
@@ -68,10 +68,8 @@ const ChatRooms = (params: {
                     const output = await res.json();
                     if (res.status != 201) {
                       params.setError(output["message"]);
-                      params.setMessage("");
                     } else {
-                      params.setError("");
-                      params.setMessage("Room created!");
+                      params.setMessage(`Created room: ${newRoomName}`);
                     }
                   }
                 }}

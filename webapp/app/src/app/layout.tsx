@@ -2,7 +2,7 @@
 
 import "./globals.css";
 
-import StoreProvider from "@/components/storeProvider";
+import StoreProvider from "@/components/StoreProvider";
 
 export default function RootLayout({
   children,

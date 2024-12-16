@@ -1,23 +1,23 @@
-
 export const localStorageMiddleware = ({
   getState,
 }: {
   getState: () => any; // eslint-disable-line
 }) => {
-  return (next: any) => (action: any) => { // eslint-disable-line
-    const result = next(action);
-    localStorage.setItem("chatState", JSON.stringify(getState()));
-    return result;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (next: any) => (action: any) => {
+    if (typeof window !== "undefined") {
+      const result = next(action);
+      localStorage.setItem("chatState", JSON.stringify(getState()));
+      return result;
+    }
   };
 };
 export const loadState = () => {
-  try {
+  if (typeof window !== "undefined") {
     const serialState = localStorage.getItem("chatState");
     if (serialState === null) {
-      return undefined;
+      throw new Error("No state in localStorage");
     }
     return JSON.parse(serialState);
-  } catch (err) {
-    return undefined;
   }
 };

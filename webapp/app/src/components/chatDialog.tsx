@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from "react";
 
 const ChatDialog = (params: {
   socket: WebSocket | undefined;
+  setError: (error: string) => void;
   setMessage: (message: string) => void;
 }) => {
   const metadata = useAppSelector((state) => state.metadata);
@@ -23,15 +24,19 @@ const ChatDialog = (params: {
 
   const [messages, setMessages] = useState<string[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  
+
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    console.log(params.socket?.readyState);
     if (params.socket && params.socket.readyState === WebSocket.CONNECTING) {
-      params.socket.onmessage = (event: MessageEvent<any>) => {
-        console.log(event.data);
+      params.socket.onmessage = (event: MessageEvent<string>) => {
         setMessages((messages) => [...messages, event.data]);
+      };
+      params.socket.onclose = (event) => {
+        params.setError("Error connecting to socket: " + event.reason);
+        dispatch(selectRoom(""));
       };
     }
   });
@@ -44,7 +49,9 @@ const ChatDialog = (params: {
     ) {
       params.socket.send(newMessage);
       setNewMessage("");
-      inputRef.current && (inputRef.current.value = "");
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
     }
     event.preventDefault();
   };

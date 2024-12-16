@@ -23,7 +23,7 @@ export const removeRoom = async (roomId: string) => {
 };
 
 const invokeRoomAction = async (action: string, body: string | null) => {
-  let request = {
+  const request = {
     method: action,
     headers: {
       "Content-Type": "application/json",
@@ -33,6 +33,7 @@ const invokeRoomAction = async (action: string, body: string | null) => {
   try {
     return await fetch(ROOM_ACTION_URL, request);
   } catch (e) {
+    console.log(`Backend error: ${e}`)
     return new Response(
       JSON.stringify({ message: "Backend connection issue." }),
       { status: 500 }
