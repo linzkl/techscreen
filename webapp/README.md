@@ -1,8 +1,8 @@
 # Chat Room
 This application serve as a Chat Room, which includes two parts, one part is a web app, another part is a server app. Web app is built as static web page with Next.js, available easily deploy to CDN network like cloudfront holding in S3. Server app is built with FastAPI can be dockerized. The app not consider holding chat room history data, but can be expanded if needed.
 
-# start app
-open one terminal
+# Start app
+- open one terminal
 ```
 cd webapp/server
 python3 -m venv .venv
@@ -11,17 +11,17 @@ pipenv install
 fastapi dev main.py
 ```
 
-open a different terminal
+- open a different terminal
 ```
 cd webapp/app
 npm install
 npm run build && npx serve@latest out
 ```
 
-# run app
-address in http://localhost:3000
+# Run chat room
+In browser open url http://localhost:3000
 
-# testing app
+# Testing app
 - You can either use different browser to open APP portal http://localhost:3000 
 - OR you can use same browser, one tab open APP portal http://localhost:3000, another tab open testing portal http://localhost:8000
 - app flow:
