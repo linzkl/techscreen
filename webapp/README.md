@@ -1,4 +1,4 @@
-# app info
+# Chat Room
 This application serve as a Chat Room, which includes two parts, one part is a web app, another part is a server app. Web app is built as static web page with Next.js, available easily deploy to CDN network like cloudfront holding in S3. Server app is built with FastAPI can be dockerized. The app not consider holding chat room history data, but can be expanded if needed.
 
 # start app
