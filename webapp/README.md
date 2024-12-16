@@ -26,3 +26,5 @@ In browser open url http://localhost:3000
   - create a new chat room, room name for alphanumeric only with 15 chars limit
   - enter specific room for chat
   - you can remove room if it is empty, or auto remove if you are the last user for that room when you leave
+
+<img width="804" alt="image" src="https://github.com/user-attachments/assets/7d8cc51c-5b67-4166-8837-bef442ba5d43" />
