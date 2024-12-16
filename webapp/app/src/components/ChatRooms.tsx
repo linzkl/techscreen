@@ -63,23 +63,21 @@ const ChatRooms = (params: {
               marginTop: "20px",
             }}
           >
-            <form onSubmit={handleCreateRoom}>
-              <Input
-                color="primary"
-                placeholder="New room name:"
-                onChange={(e) => setNewRoomName(e.target.value.toLowerCase())}
-                onKeyDown={(event) => {
-                  if (!ALPHA_NUMERIC_DASH_REGEX.test(event.key)) {
-                    event.preventDefault();
-                  }
-                }}
-              />
-              {newRoomName && (
-                <IconButton onClick={handleCreateRoom}>
-                  <AddIcon color="primary" fontSize="large"></AddIcon>
-                </IconButton>
-              )}
-            </form>
+            <Input
+              color="primary"
+              placeholder="New room name:"
+              onChange={(e) => setNewRoomName(e.target.value.toLowerCase())}
+              onKeyDown={(event) => {
+                if (!ALPHA_NUMERIC_DASH_REGEX.test(event.key)) {
+                  event.preventDefault();
+                }
+              }}
+            />
+            {newRoomName && (
+              <IconButton onClick={handleCreateRoom}>
+                <AddIcon color="primary" fontSize="large"></AddIcon>
+              </IconButton>
+            )}
           </Card>
         </div>
       </Grid>
