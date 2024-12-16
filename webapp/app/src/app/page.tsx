@@ -49,23 +49,25 @@ export default function Home() {
         setMessage("");
         setError("Error fetching rooms. Backend maybe down.");
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, message]);
-
-  
 
   return (
     <Grid container size={12}>
       <Grid container size={12} justifyContent={"center"}>
         <ChatHeader></ChatHeader>
       </Grid>
-      <Grid size={12}>
+      <Grid size={12} height={"5vh"}>
         {error && <Alert severity="error">{error}</Alert>}
         {message && <Alert severity="success">{message}</Alert>}
       </Grid>
       <Grid container size={12} marginTop={5}>
         {connectedUser && rooms?.includes(selectedRoom) ? (
-          <ChatDialog socket={socket} setMessage={setMessage} setError={setError}></ChatDialog>
+          <ChatDialog
+            socket={socket}
+            setMessage={setMessage}
+            setError={setError}
+          ></ChatDialog>
         ) : (
           <ChatRooms
             rooms={rooms}
@@ -75,17 +77,7 @@ export default function Home() {
           ></ChatRooms>
         )}
       </Grid>
-      <Dialog
-        open={!Boolean(connectedUser)}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ConnectUser />
-      </Dialog>
+      <ConnectUser open={!Boolean(connectedUser)} />
     </Grid>
   );
 }

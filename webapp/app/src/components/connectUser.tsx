@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   Button,
   Container,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -14,12 +15,29 @@ import { ALPHA_NUMERIC_DASH_REGEX } from "@/constants";
 import { updateUser } from "@/lib/features/metaSlice";
 import { useAppDispatch } from "@/lib/hooks";
 
-const ConnectUser = () => {
+const ConnectUser = (params: { open: boolean }) => {
   const [user, setUser] = useState("");
   const dispatch = useAppDispatch();
 
+  const handleConnect = () => {
+    dispatch(updateUser(user));
+  };
+
   return (
-    <Container style={{ margin: "20px" }}>
+    <Dialog
+      open={params.open}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "20px",
+      }}
+      PaperProps={{
+        component: "form",
+        onSubmit: handleConnect,
+      }}
+    >
       <DialogTitle>Enter a username to connect</DialogTitle>
       <DialogContent>
         <Input
@@ -39,11 +57,11 @@ const ConnectUser = () => {
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={() => dispatch(updateUser(user))}>
+        <Button variant="contained" onClick={handleConnect}>
           Connect
         </Button>
       </DialogActions>
-    </Container>
+    </Dialog>
   );
 };
 

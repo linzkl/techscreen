@@ -18,6 +18,19 @@ const ChatRooms = (params: {
 }) => {
   const [newRoomName, setNewRoomName] = useState("");
 
+  const handleCreateRoom = async (event: React.FormEvent) => {
+    if (newRoomName.length > 0) {
+      const res = await createRoom(newRoomName);
+      const output = await res.json();
+      if (res.status != 201) {
+        params.setError(output["message"]);
+      } else {
+        params.setMessage(`Created room: ${newRoomName}`);
+      }
+    }
+    event.preventDefault();
+  };
+
   return (
     <Container>
       <Grid size={12} columns={5} marginTop={5}>
@@ -50,33 +63,23 @@ const ChatRooms = (params: {
               marginTop: "20px",
             }}
           >
-            <Input
-              color="primary"
-              placeholder="New room name:"
-              onChange={(e) => setNewRoomName(e.target.value.toLowerCase())}
-              onKeyDown={(event) => {
-                if (!ALPHA_NUMERIC_DASH_REGEX.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-            />
-            {newRoomName && (
-              <IconButton
-                onClick={async () => {
-                  if (newRoomName.length > 0) {
-                    const res = await createRoom(newRoomName);
-                    const output = await res.json();
-                    if (res.status != 201) {
-                      params.setError(output["message"]);
-                    } else {
-                      params.setMessage(`Created room: ${newRoomName}`);
-                    }
+            <form onSubmit={handleCreateRoom}>
+              <Input
+                color="primary"
+                placeholder="New room name:"
+                onChange={(e) => setNewRoomName(e.target.value.toLowerCase())}
+                onKeyDown={(event) => {
+                  if (!ALPHA_NUMERIC_DASH_REGEX.test(event.key)) {
+                    event.preventDefault();
                   }
                 }}
-              >
-                <AddIcon color="primary" fontSize="large"></AddIcon>
-              </IconButton>
-            )}
+              />
+              {newRoomName && (
+                <IconButton onClick={handleCreateRoom}>
+                  <AddIcon color="primary" fontSize="large"></AddIcon>
+                </IconButton>
+              )}
+            </form>
           </Card>
         </div>
       </Grid>
